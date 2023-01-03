@@ -7,6 +7,8 @@ defmodule FilesChestCloudApiWeb.Router do
 
   scope "/api", FilesChestCloudApiWeb do
     pipe_through :api
+
+    post "/users", UsersController, :create
   end
 
   # Enables LiveDashboard only for development
