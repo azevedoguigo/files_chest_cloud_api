@@ -9,6 +9,7 @@ defmodule FilesChestCloudApiWeb.Router do
     pipe_through :api
 
     post "/users", UsersController, :create
+    post "/users/signin", UsersController, :sign_in
   end
 
   # Enables LiveDashboard only for development
