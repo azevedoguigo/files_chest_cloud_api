@@ -43,6 +43,10 @@ config :files_chest_cloud_api, FilesChestCloudApiWeb.Auth.Guardian,
   issuer: "files_chest_cloud_api",
   secret_key: "aUXZAzbtyyYC+M7qvK/UYjM9Sp/HuP9gTCdXjQx1lHEKA6kWHTpRW6kRoLgh++VC"
 
+config :files_chest_cloud_api, FilesChestCloudApiWeb.Auth.Pipeline,
+  module: FilesChestCloudApiWeb.Auth.Guardian,
+  error_handler: FilesChestCloudApiWeb.Auth.AuthErrorHandler
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
