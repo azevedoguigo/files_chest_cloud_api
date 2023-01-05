@@ -7,8 +7,8 @@ defmodule FilesChestCloudApiWeb.Auth.UserAuth do
   alias FilesChestCloudApi.Accounts.User
   alias FilesChestCloudApi.Repo
 
-  def authenticate(%{"id" => id, "password" => password}) do
-    case Repo.get(User, id) do
+  def authenticate(%{"email" => email, "password" => password}) do
+    case Repo.get_by(User, email: email) do
       nil -> {:error, "User does not exists!"}
       user -> validate_password(user, password)
     end
