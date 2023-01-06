@@ -24,11 +24,11 @@ defmodule FilesChestCloudApi.Accounts.User do
     user
     |> cast(params, @required_fields)
     |> validate_required(@required_fields)
-    |> validate_length(:password, min: 6)
+    |> validate_format(:email, ~r/@/)
     |> unique_constraint(:email, name: :users_email_index)
+    |> validate_length(:password, min: 6)
     |> put_password_hash()
   end
-
   defp put_password_hash(%Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset) do
     change(changeset, Argon2.add_hash(password))
   end
