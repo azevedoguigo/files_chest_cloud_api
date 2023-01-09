@@ -26,10 +26,10 @@ defmodule FilesChestCloudApiWeb.UsersController do
         |> put_status(:ok)
         |> json(%{token: token})
 
-      {:error, :unauthorized} ->
+      {:error, error_message} ->
         conn
         |> put_status(:unauthorized)
-        |> json(%{message: "Email or password invalid!"})
+        |> json(%{message: error_message})
     end
   end
 end

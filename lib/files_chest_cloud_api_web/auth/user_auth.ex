@@ -9,7 +9,7 @@ defmodule FilesChestCloudApiWeb.Auth.UserAuth do
 
   def authenticate(%{"email" => email, "password" => password}) do
     case Repo.get_by(User, email: email) do
-      nil -> {:error, "User does not exists!"}
+      nil -> {:error, "Email not registred!"}
       user -> validate_password(user, password)
     end
   end
@@ -17,7 +17,7 @@ defmodule FilesChestCloudApiWeb.Auth.UserAuth do
   def validate_password(%User{password_hash: hash} = user, password) do
     case Argon2.verify_pass(password, hash) do
       true -> create_token(user)
-      false -> {:error, :unauthorized}
+      false -> {:error, "Password invalid!"}
     end
   end
 
