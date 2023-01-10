@@ -1,6 +1,7 @@
 defmodule FilesChestCloudApiWeb.UsersControllerTest do
   use FilesChestCloudApiWeb.ConnCase
 
+  alias FilesChestCloudApiWeb.Auth.Guardian
   alias FilesChestCloudApi.Accounts
 
   @user_default_params %{
@@ -10,7 +11,18 @@ defmodule FilesChestCloudApiWeb.UsersControllerTest do
   }
 
   setup %{conn: conn} do
-    {:ok, conn: put_req_header(conn, "accept", "application/json")}
+    # Create user to authenticate.
+    user_params = %{
+      name: "Guigo",
+      email: "guigo.test.auth@example.com",
+      password: "supersenha"
+    }
+
+    {:ok, user} = Accounts.Create.register_user(user_params)
+    {:ok, token, _claims} = Guardian.encode_and_sign(user)
+
+    conn = put_req_header(conn, "authorization", "Bearer #{token}")
+    {:ok, conn: conn}
   end
 
   describe "create/2" do
@@ -79,6 +91,38 @@ defmodule FilesChestCloudApiWeb.UsersControllerTest do
         |> json_response(:unauthorized)
 
       assert %{"message" => "Password invalid!"} == response
+    end
+  end
+
+  describe "get_user_by_id/2" do
+    test "Returns user information when the id is valid and registered.", %{conn: conn} do
+      # Get the id of the new user.
+      {:ok, %Accounts.User{id: user_id}} = Accounts.Create.register_user(@user_default_params)
+
+      response =
+        conn
+        |> get(Routes.users_path(conn, :get_by_id, %{"id" => user_id}))
+        |> json_response(:ok)
+
+      assert %{"user" => %{"id" => ^user_id}} = response
+    end
+
+    test "When the id entered does not belong to any user, it returns an error message.", %{conn: conn} do
+      response =
+        conn
+        |> get(Routes.users_path(conn, :get_by_id, %{"id" => "50dc5f92-053a-411e-99a6-566b04c79b67"}))
+        |> json_response(:not_found)
+
+      assert %{"message" => "User does not exists!"} == response
+    end
+
+    test "When the provided id is not valid, it returns an error message.", %{conn: conn} do
+      response =
+        conn
+        |> get(Routes.users_path(conn, :get_by_id, %{"id" => "invalid_id_format"}))
+        |> json_response(:bad_request)
+
+      assert %{"message" => "Invalid id format!"} == response
     end
   end
 end
