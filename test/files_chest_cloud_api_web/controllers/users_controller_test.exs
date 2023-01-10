@@ -2,7 +2,7 @@ defmodule FilesChestCloudApiWeb.UsersControllerTest do
   use FilesChestCloudApiWeb.ConnCase
 
   alias FilesChestCloudApiWeb.Auth.Guardian
-  alias FilesChestCloudApi.Accounts
+  alias FilesChestCloudApi.Accounts.{User, Create}
 
   @user_default_params %{
     name: "Guigo",
@@ -18,7 +18,7 @@ defmodule FilesChestCloudApiWeb.UsersControllerTest do
       password: "supersenha"
     }
 
-    {:ok, user} = Accounts.Create.register_user(user_params)
+    {:ok, user} = Create.register_user(user_params)
     {:ok, token, _claims} = Guardian.encode_and_sign(user)
 
     conn = put_req_header(conn, "authorization", "Bearer #{token}")
@@ -54,7 +54,7 @@ defmodule FilesChestCloudApiWeb.UsersControllerTest do
 
   describe "sign_in/2" do
     test "When credentials are valid, it returns a token.", %{conn: conn} do
-      Accounts.Create.register_user(@user_default_params)
+      Create.register_user(@user_default_params)
 
       credentials = %{email: "guigo.test@example.com", password: "supersenha"}
 
@@ -68,7 +68,7 @@ defmodule FilesChestCloudApiWeb.UsersControllerTest do
     end
 
     test "When the email is invalid, it returns an error message.", %{conn: conn} do
-      Accounts.Create.register_user(@user_default_params)
+      Create.register_user(@user_default_params)
 
       credentials = %{email: "wrong_email@example.com", password: "supersenha"}
 
@@ -81,7 +81,7 @@ defmodule FilesChestCloudApiWeb.UsersControllerTest do
     end
 
     test "When the password is invalid, it returns an error message.", %{conn: conn} do
-      Accounts.Create.register_user(@user_default_params)
+      Create.register_user(@user_default_params)
 
       credentials = %{email: "guigo.test@example.com", password: "wrong_password"}
 
@@ -97,7 +97,7 @@ defmodule FilesChestCloudApiWeb.UsersControllerTest do
   describe "get_user_by_id/2" do
     test "Returns user information when the id is valid and registered.", %{conn: conn} do
       # Get the id of the new user.
-      {:ok, %Accounts.User{id: user_id}} = Accounts.Create.register_user(@user_default_params)
+      {:ok, %User{id: user_id}} = Create.register_user(@user_default_params)
 
       response =
         conn
