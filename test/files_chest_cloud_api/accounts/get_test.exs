@@ -4,7 +4,7 @@ defmodule FilesChestCloudApi.Accounts.GetTest do
   alias FilesChestCloudApi.Accounts.{User, Create, Get}
 
   describe "get_user_by_id/1" do
-    test "When the id are valid and user When the id is valid and there is a user with that id, returns the user." do
+    test "When the id is valid and there is a user with that id, returns the user." do
       params = %{
         name: "Guigo",
         email: "guigo.test@example.com",
