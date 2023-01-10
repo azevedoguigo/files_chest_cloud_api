@@ -5,11 +5,21 @@ defmodule FilesChestCloudApiWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :auth do
+    plug FilesChestCloudApiWeb.Auth.Pipeline
+  end
+
   scope "/api", FilesChestCloudApiWeb do
     pipe_through :api
 
     post "/users", UsersController, :create
     post "/users/signin", UsersController, :sign_in
+  end
+
+  scope "/api", FilesChestCloudApiWeb do
+    pipe_through [:api, :auth]
+
+    get "/users", UsersController, :get_by_id
   end
 
   # Enables LiveDashboard only for development
