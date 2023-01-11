@@ -20,6 +20,7 @@ defmodule FilesChestCloudApiWeb.Router do
     pipe_through [:api, :auth]
 
     get "/users", UsersController, :get_by_id
+    put "/users", UsersController, :update
     delete "/users", UsersController, :delete
   end
 

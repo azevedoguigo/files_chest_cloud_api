@@ -1,7 +1,7 @@
 defmodule FilesChestCloudApiWeb.UsersController do
   use FilesChestCloudApiWeb, :controller
 
-  alias FilesChestCloudApi.Accounts.{Create, Get, Delete}
+  alias FilesChestCloudApi.Accounts.{Create, Get, Update, Delete}
   alias FilesChestCloudApiWeb.Auth.UserAuth
   alias FilesChestCloudApiWeb.ErrorHandler
 
@@ -51,6 +51,33 @@ defmodule FilesChestCloudApiWeb.UsersController do
             conn
             |> put_status(:not_found)
             |> json(%{message: message})
+        end
+    end
+  end
+
+  def update(conn, params_to_update) do
+    case Update.update_user(params_to_update) do
+      {:ok, updated_user} ->
+        conn
+        |> put_status(:ok)
+        |> json(%{message: "User updated!", user: updated_user})
+
+      {:error, reason} ->
+        case reason do
+          "Invalid id format!" ->
+            conn
+            |> put_status(:bad_request)
+            |> json(%{message: reason})
+
+          "User does not exists!" ->
+            conn
+            |> put_status(:not_found)
+            |> json(%{message: reason})
+
+          invalid_changeset ->
+            conn
+            |> put_status(:bad_request)
+            |> json(%{error: ErrorHandler.translate_errors(invalid_changeset)})
         end
     end
   end
