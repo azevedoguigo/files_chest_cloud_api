@@ -20,6 +20,7 @@ defmodule FilesChestCloudApiWeb.Router do
     pipe_through [:api, :auth]
 
     get "/users", UsersController, :get_by_id
+    delete "/users", UsersController, :delete
   end
 
   # Enables LiveDashboard only for development
