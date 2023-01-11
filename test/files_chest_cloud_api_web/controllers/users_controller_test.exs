@@ -125,4 +125,36 @@ defmodule FilesChestCloudApiWeb.UsersControllerTest do
       assert %{"message" => "Invalid id format!"} == response
     end
   end
+
+  describe "delete/2" do
+    test "Delete user account when the id is valid and registered.", %{conn: conn} do
+      # Get the id of new user.
+      {:ok, %User{id: user_id}} = Create.register_user(@user_default_params)
+
+      response =
+        conn
+        |> delete(Routes.users_path(conn, :delete, %{"id" => user_id}))
+        |> json_response(:ok)
+
+      assert %{"message" => "User deleted!"} == response
+    end
+
+    test "When the id entered does not belong to any user, it returns an error message.", %{conn: conn} do
+      response =
+        conn
+        |> delete(Routes.users_path(conn, :delete, %{"id" => "2df2498f-6f64-46bf-82ad-6d4343dd9b59"}))
+        |> json_response(:not_found)
+
+      assert %{"message" => "User does not exists!"} == response
+    end
+
+    test "When the provided id is not valid, it returns an error message.", %{conn: conn} do
+      response =
+        conn
+        |> delete(Routes.users_path(conn, :delete, %{"id" => "invalid_id_format"}))
+        |> json_response(:bad_request)
+
+      assert %{"message" => "Invalid id format!"} == response
+    end
+  end
 end
