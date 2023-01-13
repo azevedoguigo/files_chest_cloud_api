@@ -90,7 +90,7 @@ defmodule FilesChestCloudApiWeb.UsersControllerTest do
         |> post(Routes.users_path(conn, :sign_in, credentials))
         |> json_response(:unauthorized)
 
-      assert %{"message" => "Password invalid!"} == response
+      assert %{"message" => "Invalid password!"} == response
     end
   end
 

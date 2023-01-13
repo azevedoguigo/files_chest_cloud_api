@@ -17,7 +17,7 @@ defmodule FilesChestCloudApiWeb.Auth.UserAuth do
   def validate_password(%User{password_hash: hash} = user, password) do
     case Argon2.verify_pass(password, hash) do
       true -> create_token(user)
-      false -> {:error, "Password invalid!"}
+      false -> {:error, "Invalid password!"}
     end
   end
 
