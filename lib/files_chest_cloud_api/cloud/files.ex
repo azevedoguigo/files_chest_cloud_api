@@ -1,6 +1,6 @@
-defmodule FilesChestCloudApi.Cloud.Upload do
+defmodule FilesChestCloudApi.Cloud.Files do
   @moduledoc """
-  File upload service to AWS S3.
+  Provides functions to manage files in the cloud.
   """
 
   alias ExAws.S3
