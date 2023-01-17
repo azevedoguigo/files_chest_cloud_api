@@ -22,6 +22,9 @@ defmodule FilesChestCloudApiWeb.Router do
     get "/users", UsersController, :get_by_id
     put "/users", UsersController, :update
     delete "/users", UsersController, :delete
+
+    # Cloud endpoints
+    post "/upload", FilesCloudController, :upload
   end
 
   # Enables LiveDashboard only for development
