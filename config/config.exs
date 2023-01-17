@@ -38,7 +38,6 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 # Guardian configuration.
-
 config :files_chest_cloud_api, FilesChestCloudApiWeb.Auth.Guardian,
   issuer: "files_chest_cloud_api",
   secret_key: "aUXZAzbtyyYC+M7qvK/UYjM9Sp/HuP9gTCdXjQx1lHEKA6kWHTpRW6kRoLgh++VC"
@@ -46,6 +45,12 @@ config :files_chest_cloud_api, FilesChestCloudApiWeb.Auth.Guardian,
 config :files_chest_cloud_api, FilesChestCloudApiWeb.Auth.Pipeline,
   module: FilesChestCloudApiWeb.Auth.Guardian,
   error_handler: FilesChestCloudApiWeb.Auth.AuthErrorHandler
+
+# ExAws
+config :ex_aws,
+  access_key_id: [{:system, "AWS_ACCESS_KEY_ID"}, :instance_role],
+  secret_access_key: [{:system, "AWS_SECRET_ACCESS_KEY"}, :instance_role],
+  region: "us-west-2"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
