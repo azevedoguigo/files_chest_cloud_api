@@ -15,6 +15,16 @@ defmodule FilesChestCloudApiWeb.FilesCloudController do
     |> json(%{files: files_list})
   end
 
+  def download(conn, %{"filename" => filename}) do
+    %User{id: user_id} = Guardian.Plug.current_resource(conn)
+
+    {:ok, url} = Files.download_file(user_id, filename)
+
+    conn
+    |> put_status(:ok)
+    |> json(%{download_url: url})
+  end
+
   def upload(conn, %{"upload" => upload_params}) do
     %User{id: user_id} = Guardian.Plug.current_resource(conn)
 

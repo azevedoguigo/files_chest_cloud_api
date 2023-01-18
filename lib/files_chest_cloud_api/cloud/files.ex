@@ -20,6 +20,18 @@ defmodule FilesChestCloudApi.Cloud.Files do
     files_list
   end
 
+  def download_file(user_id, filename) do
+    bucket_name = System.get_env("BUCKET_NAME")
+
+    file_path = "#{user_id}/#{filename}"
+
+    config = ExAws.Config.new(:s3)
+
+    {:ok, url} = S3.presigned_url(config, :get, bucket_name, file_path)
+
+    {:ok, url}
+  end
+
   def upload_file(upload_params, user_id) do
     file = upload_params.path
     file_name = upload_params.filename

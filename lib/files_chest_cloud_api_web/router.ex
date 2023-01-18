@@ -26,6 +26,7 @@ defmodule FilesChestCloudApiWeb.Router do
     # Cloud endpoints
     get "/list-files", FilesCloudController, :list_files
     post "/upload", FilesCloudController, :upload
+    get "/download", FilesCloudController, :download
   end
 
   # Enables LiveDashboard only for development
