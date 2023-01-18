@@ -49,4 +49,14 @@ defmodule FilesChestCloudApi.Cloud.Files do
 
     %{s3_url: s3_url}
   end
+
+  def delete_file(user_id, filename) do
+    bucket_name = System.get_env("BUCKET_NAME")
+    s3_path = "#{user_id}/#{filename}"
+
+    request = S3.delete_object(bucket_name, s3_path)
+    response = ExAws.request!(request)
+
+    {:ok, response}
+  end
 end

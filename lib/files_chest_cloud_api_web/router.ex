@@ -27,6 +27,7 @@ defmodule FilesChestCloudApiWeb.Router do
     get "/list-files", FilesCloudController, :list_files
     post "/upload", FilesCloudController, :upload
     get "/download", FilesCloudController, :download
+    delete "/delete-file", FilesCloudController, :delete
   end
 
   # Enables LiveDashboard only for development

@@ -34,4 +34,22 @@ defmodule FilesChestCloudApiWeb.FilesCloudController do
     |> put_status(:ok)
     |> json(%{message: response})
   end
+
+  def delete(conn, %{"filename" => filename}) do
+    %User{id: user_id} = Guardian.Plug.current_resource(conn)
+
+    {:ok, %{status_code: status_code}} = Files.delete_file(user_id, filename)
+
+    case status_code do
+      204 ->
+        conn
+        |> put_status(:ok)
+        |> json(%{message: "File successfully deleted!"})
+
+      _ ->
+        conn
+        |> put_status(:bad_request)
+        |> json(%{message: "Something went wrong while deleting the file..."})
+    end
+  end
 end
