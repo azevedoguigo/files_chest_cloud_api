@@ -28,11 +28,19 @@ defmodule FilesChestCloudApiWeb.FilesCloudController do
   def upload(conn, %{"upload" => upload_params}) do
     %User{id: user_id} = Guardian.Plug.current_resource(conn)
 
-    response = Files.upload_file(upload_params, user_id)
+    {:ok, %{status_code: status_code}} = Files.upload_file(upload_params, user_id)
 
-    conn
-    |> put_status(:ok)
-    |> json(%{message: response})
+    case status_code do
+      200 ->
+        conn
+        |> put_status(status_code)
+        |> json(%{message: "File successfully uploaded!"})
+
+      _ ->
+        conn
+        |> put_status(:bad_request)
+        |> json(%{message: "Something went wrong while uploading the file..."})
+    end
   end
 
   def delete(conn, %{"filename" => filename}) do
