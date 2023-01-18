@@ -5,6 +5,21 @@ defmodule FilesChestCloudApi.Cloud.Files do
 
   alias ExAws.S3
 
+  def list_files(user_id) do
+    bucket_name = System.get_env("BUCKET_NAME")
+
+    # Get the files and returns only the file names.
+    files_list =
+      S3.list_objects_v2(bucket_name)
+      |> ExAws.stream!()
+      |> Enum.to_list()
+      |> Enum.map(fn file -> Map.fetch(file, :key) end)
+      |> Enum.filter(fn {:ok, file_path} -> String.contains?(file_path, user_id) end)
+      |> Enum.map(fn {:ok, file_path} -> String.slice(file_path, 37, String.length(file_path)) end)
+
+    files_list
+  end
+
   def upload_file(upload_params, user_id) do
     file = upload_params.path
     file_name = upload_params.filename
