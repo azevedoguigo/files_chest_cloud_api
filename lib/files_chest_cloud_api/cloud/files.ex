@@ -37,17 +37,13 @@ defmodule FilesChestCloudApi.Cloud.Files do
     file_name = upload_params.filename
 
     bucket_name = System.get_env("BUCKET_NAME")
-
     s3_path = "#{user_id}/#{file_name}"
 
-    file
-    |> S3.Upload.stream_file()
-    |> S3.upload(bucket_name, s3_path)
-    |> ExAws.request!()
+    stream = S3.Upload.stream_file(file)
+    request = S3.upload(stream, bucket_name, s3_path)
+    response = ExAws.request!(request)
 
-    s3_url = "http://#{bucket_name}.s3.amazonaws.com/#{s3_path}"
-
-    %{s3_url: s3_url}
+    {:ok, response}
   end
 
   def delete_file(user_id, filename) do
