@@ -5,6 +5,24 @@ defmodule FilesChestCloudApiWeb.FilesCloudController do
   alias FilesChestCloudApi.Accounts.User
   alias FilesChestCloudApiWeb.Auth.Guardian
 
+  def get_file_info(conn, %{"filename" => filename}) do
+    %User{id: user_id} = Guardian.Plug.current_resource(conn)
+
+    file = Files.get_file_info(user_id, filename)
+
+    case file do
+      nil ->
+        conn
+        |> put_status(:not_found)
+        |> json(%{message: "File does not exists!"})
+
+      file ->
+        conn
+        |> put_status(:ok)
+        |> json(%{file: file})
+    end
+  end
+
   def list_files(conn, _) do
     %User{id: user_id} = Guardian.Plug.current_resource(conn)
 

@@ -24,6 +24,7 @@ defmodule FilesChestCloudApiWeb.Router do
     delete "/users", UsersController, :delete
 
     # Cloud endpoints
+    get "/get-file-info", FilesCloudController, :get_file_info
     get "/list-files", FilesCloudController, :list_files
     post "/upload", FilesCloudController, :upload
     get "/download", FilesCloudController, :download
