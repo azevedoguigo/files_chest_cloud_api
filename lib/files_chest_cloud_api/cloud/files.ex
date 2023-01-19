@@ -8,16 +8,16 @@ defmodule FilesChestCloudApi.Cloud.Files do
   def list_files(user_id) do
     bucket_name = System.get_env("BUCKET_NAME")
 
-    # Get the files and returns only the file names.
     files_list =
       S3.list_objects_v2(bucket_name)
       |> ExAws.stream!()
       |> Enum.to_list()
-      |> Enum.map(fn file -> Map.fetch(file, :key) end)
-      |> Enum.filter(fn {:ok, file_path} -> String.contains?(file_path, user_id) end)
-      |> Enum.map(fn {:ok, file_path} -> String.slice(file_path, 37, String.length(file_path)) end)
+      |> Enum.filter(fn file -> String.contains?(file.key, user_id) end)
+      |> Enum.map(fn file ->
+        Map.put(file, :key, String.slice(file.key, 37, String.length(file.key)))
+      end)
 
-    files_list
+    {:ok, files_list}
   end
 
   def download_file(user_id, filename) do

@@ -8,7 +8,7 @@ defmodule FilesChestCloudApiWeb.FilesCloudController do
   def list_files(conn, _) do
     %User{id: user_id} = Guardian.Plug.current_resource(conn)
 
-    files_list = Files.list_files(user_id)
+    {:ok, files_list} = Files.list_files(user_id)
 
     conn
     |> put_status(:ok)
