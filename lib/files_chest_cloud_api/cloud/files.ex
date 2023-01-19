@@ -56,9 +56,16 @@ defmodule FilesChestCloudApi.Cloud.Files do
   def delete_file(user_id, filename) do
     s3_path = "#{user_id}/#{filename}"
 
+    file_info = get_file_info(user_id, filename)
+
+    case file_info do
+      nil -> {:error, "File does not exists!"}
+
+      _file ->
         request = S3.delete_object(@bucket_name, s3_path)
         response = ExAws.request!(request)
 
-    {:ok, response}
+        {:ok, response}
+    end
   end
 end
