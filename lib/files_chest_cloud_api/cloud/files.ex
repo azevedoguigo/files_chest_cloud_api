@@ -5,11 +5,11 @@ defmodule FilesChestCloudApi.Cloud.Files do
 
   alias ExAws.S3
 
-  def list_files(user_id) do
-    bucket_name = System.get_env("BUCKET_NAME")
+  @bucket_name "#{System.get_env("BUCKET_NAME")}"
 
+  def list_files(user_id) do
     files_list =
-      S3.list_objects_v2(bucket_name)
+      S3.list_objects_v2(@bucket_name)
       |> ExAws.stream!()
       |> Enum.to_list()
       |> Enum.filter(fn file -> String.contains?(file.key, user_id) end)
@@ -21,13 +21,11 @@ defmodule FilesChestCloudApi.Cloud.Files do
   end
 
   def download_file(user_id, filename) do
-    bucket_name = System.get_env("BUCKET_NAME")
-
     file_path = "#{user_id}/#{filename}"
 
     config = ExAws.Config.new(:s3)
 
-    {:ok, url} = S3.presigned_url(config, :get, bucket_name, file_path)
+    {:ok, url} = S3.presigned_url(config, :get, @bucket_name, file_path)
 
     {:ok, url}
   end
@@ -36,21 +34,19 @@ defmodule FilesChestCloudApi.Cloud.Files do
     file = upload_params.path
     file_name = upload_params.filename
 
-    bucket_name = System.get_env("BUCKET_NAME")
     s3_path = "#{user_id}/#{file_name}"
 
     stream = S3.Upload.stream_file(file)
-    request = S3.upload(stream, bucket_name, s3_path)
+    request = S3.upload(stream, @bucket_name, s3_path)
     response = ExAws.request!(request)
 
     {:ok, response}
   end
 
   def delete_file(user_id, filename) do
-    bucket_name = System.get_env("BUCKET_NAME")
     s3_path = "#{user_id}/#{filename}"
 
-    request = S3.delete_object(bucket_name, s3_path)
+    request = S3.delete_object(@bucket_name, s3_path)
     response = ExAws.request!(request)
 
     {:ok, response}
