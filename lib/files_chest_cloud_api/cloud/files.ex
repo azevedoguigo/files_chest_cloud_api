@@ -7,6 +7,16 @@ defmodule FilesChestCloudApi.Cloud.Files do
 
   @bucket_name "#{System.get_env("BUCKET_NAME")}"
 
+  def get_file_info(user_id, filename) do
+    {:ok, files_list} = list_files(user_id)
+
+    file = Enum.find(files_list, fn file ->
+      String.contains?(file.key, filename)
+    end)
+
+    file
+  end
+
   def list_files(user_id) do
     files_list =
       S3.list_objects_v2(@bucket_name)
@@ -46,8 +56,8 @@ defmodule FilesChestCloudApi.Cloud.Files do
   def delete_file(user_id, filename) do
     s3_path = "#{user_id}/#{filename}"
 
-    request = S3.delete_object(@bucket_name, s3_path)
-    response = ExAws.request!(request)
+        request = S3.delete_object(@bucket_name, s3_path)
+        response = ExAws.request!(request)
 
     {:ok, response}
   end
