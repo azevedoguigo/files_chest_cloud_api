@@ -42,7 +42,8 @@ defmodule FilesChestCloudApi.Cloud.Files do
 
   def upload_file(upload_params, user_id) do
     file = upload_params.path
-    file_name = upload_params.filename
+
+    file_name = "#{DateTime.utc_now()}-#{upload_params.filename}"
 
     s3_path = "#{user_id}/#{file_name}"
 
