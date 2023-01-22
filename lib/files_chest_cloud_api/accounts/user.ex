@@ -10,7 +10,7 @@ defmodule FilesChestCloudApi.Accounts.User do
   @primary_key {:id, Ecto.UUID, autogenerate: true}
   @required_fields [:name, :email, :password]
 
-  @derive {Jason.Encoder, only: [:id, :name, :email, :inserted_at]}
+  @derive {Jason.Encoder, only: [:id, :name, :email, :inserted_at, :updated_at]}
   schema "users" do
     field(:name, :string)
     field(:email, :string)
