@@ -1,9 +1,12 @@
 # FilesChestCloudApi
 
+### This is a web api from a personal project to manage files in the cloud (AWS S3).
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
   * Create and migrate your database with `mix ecto.setup`
+  * Set as environment variable: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY and BUCKET_NAME
   * Run the tests with `mix test`
   * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
 
