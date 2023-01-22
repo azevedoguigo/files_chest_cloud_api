@@ -5,7 +5,7 @@ defmodule FilesChestCloudApi.Cloud.Files do
 
   alias ExAws.S3
 
-  @bucket_name "#{System.get_env("BUCKET_NAME")}"
+  #@bucket_name "#{System.get_env("BUCKET_NAME")}"
 
   def get_file_info(user_id, filename) do
     {:ok, files_list} = list_files(user_id)
@@ -19,7 +19,7 @@ defmodule FilesChestCloudApi.Cloud.Files do
 
   def list_files(user_id) do
     files_list =
-      S3.list_objects_v2(@bucket_name)
+      S3.list_objects_v2("files-chest-cloud-api")
       |> ExAws.stream!()
       |> Enum.to_list()
       |> Enum.filter(fn file -> String.contains?(file.key, user_id) end)
@@ -35,7 +35,7 @@ defmodule FilesChestCloudApi.Cloud.Files do
 
     config = ExAws.Config.new(:s3)
 
-    {:ok, url} = S3.presigned_url(config, :get, @bucket_name, file_path)
+    {:ok, url} = S3.presigned_url(config, :get, "files-chest-cloud-api", file_path)
 
     {:ok, url}
   end
@@ -48,7 +48,7 @@ defmodule FilesChestCloudApi.Cloud.Files do
     s3_path = "#{user_id}/#{file_name}"
 
     stream = S3.Upload.stream_file(file)
-    request = S3.upload(stream, @bucket_name, s3_path)
+    request = S3.upload(stream, "files-chest-cloud-api", s3_path)
     response = ExAws.request!(request)
 
     {:ok, response}
@@ -63,7 +63,7 @@ defmodule FilesChestCloudApi.Cloud.Files do
       nil -> {:error, "File does not exists!"}
 
       _file ->
-        request = S3.delete_object(@bucket_name, s3_path)
+        request = S3.delete_object("files-chest-cloud-api", s3_path)
         response = ExAws.request!(request)
 
         {:ok, response}
