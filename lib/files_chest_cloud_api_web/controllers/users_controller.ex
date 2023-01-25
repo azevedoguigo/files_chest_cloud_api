@@ -24,7 +24,7 @@ defmodule FilesChestCloudApiWeb.UsersController do
       {:ok, token} ->
         conn
         |> put_status(:ok)
-        |> json(%{token: token})
+        |> json(token)
 
       {:error, error_message} ->
         conn
