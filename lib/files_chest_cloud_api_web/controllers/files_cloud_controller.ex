@@ -30,7 +30,7 @@ defmodule FilesChestCloudApiWeb.FilesCloudController do
 
     conn
     |> put_status(:ok)
-    |> json(%{files: files_list})
+    |> json(files_list)
   end
 
   def download(conn, %{"filename" => filename}) do
