@@ -37,6 +37,11 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+config :cors_plug,
+  origin: ["*"],
+  max_age: 86400,
+  methods: ["GET", "POST", "PUT", "DELETE"]
+
 # Guardian configuration.
 config :files_chest_cloud_api, FilesChestCloudApiWeb.Auth.Guardian,
   issuer: "files_chest_cloud_api",
