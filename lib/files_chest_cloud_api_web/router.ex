@@ -24,11 +24,11 @@ defmodule FilesChestCloudApiWeb.Router do
     delete "/users", UsersController, :delete
 
     # Cloud endpoints
-    get "/get-file-info", FilesCloudController, :get_file_info
-    get "/list-files", FilesCloudController, :list_files
-    post "/upload", FilesCloudController, :upload
-    get "/download", FilesCloudController, :download
-    delete "/delete-file", FilesCloudController, :delete
+    get "/cloud/get-file-info", FilesCloudController, :get_file_info
+    get "/cloud/list-files", FilesCloudController, :list_files
+    get "/cloud/download", FilesCloudController, :download
+    post "/cloud/upload", FilesCloudController, :upload
+    delete "/cloud/delete-file", FilesCloudController, :delete
   end
 
   # Enables LiveDashboard only for development
