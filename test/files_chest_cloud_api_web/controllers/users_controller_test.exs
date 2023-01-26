@@ -63,8 +63,8 @@ defmodule FilesChestCloudApiWeb.UsersControllerTest do
         |> post(Routes.users_path(conn, :sign_in, credentials))
         |> json_response(:ok)
 
-      %{"token" => token} = response
-      assert %{"token" => token} == response
+      token = response
+      assert token == response
     end
 
     test "When the email is invalid, it returns an error message.", %{conn: conn} do
