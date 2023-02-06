@@ -1,4 +1,8 @@
 defmodule FilesChestCloudApi.Accounts.Get do
+  @moduledoc """
+  This module provides the get_user_by_id/1 function.
+  """
+
   alias FilesChestCloudApi.Repo
   alias FilesChestCloudApi.Accounts.User
   alias Ecto.UUID

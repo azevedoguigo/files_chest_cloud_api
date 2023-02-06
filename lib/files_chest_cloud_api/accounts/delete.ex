@@ -1,4 +1,8 @@
 defmodule FilesChestCloudApi.Accounts.Delete do
+  @moduledoc """
+  This module provides the delete_user/1 function.
+  """
+
   alias FilesChestCloudApi.Accounts.User
   alias FilesChestCloudApi.Repo
   alias Ecto.UUID

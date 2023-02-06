@@ -1,4 +1,8 @@
 defmodule FilesChestCloudApi.Accounts.Update do
+  @moduledoc """
+  This module provides the update_user/1 function.
+  """
+
   alias FilesChestCloudApi.Accounts.User
   alias FilesChestCloudApi.Repo
   alias Ecto.UUID
