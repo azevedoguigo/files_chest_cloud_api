@@ -22,7 +22,7 @@ defmodule FilesChestCloudApiWeb.Auth.UserAuth do
   end
 
   defp create_token(user) do
-    {:ok, token, _claims} = Guardian.encode_and_sign(user)
+    {:ok, token, _claims} = Guardian.encode_and_sign(user, %{}, ttl: {8, :hours})
     {:ok, token}
   end
 end
