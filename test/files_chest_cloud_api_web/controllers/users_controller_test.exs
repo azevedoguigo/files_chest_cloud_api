@@ -94,6 +94,22 @@ defmodule FilesChestCloudApiWeb.UsersControllerTest do
     end
   end
 
+  describe "get_current_user/1" do
+    test "When the token is valid, it returns the current user.", %{conn: conn} do
+      response =
+        conn
+        |> get(Routes.users_path(conn, :get_current_user))
+        |> json_response(:ok)
+
+      assert %{
+        "user" => %{
+          "email" => "guigo.test.auth@example.com",
+          "name" => "Guigo"
+        }
+      } = response
+    end
+  end
+
   describe "get_by_id/2" do
     test "Returns user information when the id is valid and registered.", %{conn: conn} do
       # Get the id of the new user.
