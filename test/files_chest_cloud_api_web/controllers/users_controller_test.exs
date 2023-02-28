@@ -94,7 +94,7 @@ defmodule FilesChestCloudApiWeb.UsersControllerTest do
     end
   end
 
-  describe "get_user_by_id/2" do
+  describe "get_by_id/2" do
     test "Returns user information when the id is valid and registered.", %{conn: conn} do
       # Get the id of the new user.
       {:ok, %User{id: user_id}} = Create.register_user(@user_default_params)
