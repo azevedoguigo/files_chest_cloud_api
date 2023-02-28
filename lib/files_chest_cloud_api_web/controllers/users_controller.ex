@@ -1,6 +1,7 @@
 defmodule FilesChestCloudApiWeb.UsersController do
   use FilesChestCloudApiWeb, :controller
 
+  alias FilesChestCloudApiWeb.Auth.Guardian
   alias FilesChestCloudApi.Accounts.{Create, Get, Update, Delete}
   alias FilesChestCloudApiWeb.Auth.UserAuth
   alias FilesChestCloudApiWeb.ErrorHandler
@@ -31,6 +32,14 @@ defmodule FilesChestCloudApiWeb.UsersController do
         |> put_status(:unauthorized)
         |> json(%{message: error_message})
     end
+  end
+
+  def get_current_user(conn, _) do
+    user = Guardian.Plug.current_resource(conn)
+
+    conn
+    |> put_status(:ok)
+    |> json(%{user: user})
   end
 
   def get_by_id(conn, %{"id" => id}) do
