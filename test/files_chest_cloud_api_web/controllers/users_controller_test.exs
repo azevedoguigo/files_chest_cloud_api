@@ -181,7 +181,8 @@ defmodule FilesChestCloudApiWeb.UsersControllerTest do
       params_to_update = %{
         "id" => user_id,
         "email" => "updated_email@example.com",
-        "password" => "supersenha"
+        "password" => "supersenha",
+        "currentPassword" => "supersenha"
       }
 
       response =
@@ -203,7 +204,8 @@ defmodule FilesChestCloudApiWeb.UsersControllerTest do
       params_to_update = %{
         "id" => user_id,
         "email" => "updated_email@example.com",
-        "password" => ""
+        "password" => "",
+        "currentPassword" => "supersenha"
       }
 
       response =
@@ -220,7 +222,8 @@ defmodule FilesChestCloudApiWeb.UsersControllerTest do
       params_to_update = %{
         "id" => user_id,
         "email" => "",
-        "password" => "supersenha"
+        "password" => "supersenha",
+        "currentPassword" => "supersenha"
       }
 
       response =
@@ -235,7 +238,8 @@ defmodule FilesChestCloudApiWeb.UsersControllerTest do
       params_to_update = %{
         "id" => "4e27ecb5-cb0b-4674-99cd-522656aec893",
         "email" => "updated_email@example.com",
-        "password" => "supersenha"
+        "password" => "supersenha",
+        "currentPassword" => "supersenha"
       }
 
       response =
@@ -250,7 +254,8 @@ defmodule FilesChestCloudApiWeb.UsersControllerTest do
       params_to_update = %{
         "id" => "invalid_id_format",
         "email" => "updated_email@example.com",
-        "password" => "supersenha"
+        "password" => "supersenha",
+        "currentPassword" => "supersenha"
       }
 
       response =

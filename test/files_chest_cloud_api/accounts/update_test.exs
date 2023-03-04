@@ -16,7 +16,8 @@ defmodule FilesChestCloudApi.Accounts.UpdateTest do
       params_to_update = %{
         "id" => user_id,
         "email" => "updated_email@example.com",
-        "password" => "supersenha"
+        "password" => "new_password",
+        "currentPassword" => "supersenha"
       }
 
       response = Update.update_user(params_to_update)
@@ -30,7 +31,8 @@ defmodule FilesChestCloudApi.Accounts.UpdateTest do
       params_to_update = %{
         "id" => user_id,
         "email" => "updated_email@example.com",
-        "password" => ""
+        "password" => "",
+        "currentPassword" => "supersenha"
       }
 
       {:error, invalid_changeset} = Update.update_user(params_to_update)
@@ -44,7 +46,8 @@ defmodule FilesChestCloudApi.Accounts.UpdateTest do
       params_to_update = %{
         "id" => user_id,
         "email" => "",
-        "password" => "supersenha"
+        "password" => "supersenha",
+        "currentPassword" => "supersenha"
       }
 
       {:error, invalid_changeset} = Update.update_user(params_to_update)
@@ -56,7 +59,8 @@ defmodule FilesChestCloudApi.Accounts.UpdateTest do
       params_to_update = %{
         "id" => "4e27ecb5-cb0b-4674-99cd-522656aec893",
         "email" => "updated_email@example.com",
-        "password" => "supersenha"
+        "password" => "supersenha",
+        "currentPassword" => "supersenha"
       }
 
       response = Update.update_user(params_to_update)
@@ -68,7 +72,8 @@ defmodule FilesChestCloudApi.Accounts.UpdateTest do
       params_to_update = %{
         "id" => "invalid_id_format",
         "email" => "updated_email@example.com",
-        "password" => "supersenha"
+        "password" => "supersenha",
+        "currentPassword" => "supersenha"
       }
 
       response = Update.update_user(params_to_update)

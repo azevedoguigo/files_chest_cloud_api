@@ -83,6 +83,11 @@ defmodule FilesChestCloudApiWeb.UsersController do
             |> put_status(:not_found)
             |> json(%{message: reason})
 
+          "Incorrect password!" ->
+            conn
+            |> put_status(:bad_request)
+            |> json(%{message: reason})
+
           invalid_changeset ->
             conn
             |> put_status(:bad_request)
