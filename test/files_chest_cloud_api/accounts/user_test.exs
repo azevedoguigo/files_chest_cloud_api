@@ -40,6 +40,18 @@ defmodule FilesChestCloudApi.Accounts.UserTest do
       assert errors_on(response) == %{name: ["should be at least 2 character(s)"]}
     end
 
+    test "When the name has more than 50 characters, it returns an error message." do
+      params = %{
+        name: "José João Guilherme Barrichello Senna Silva",
+        email: "guigo.test@example.com",
+        password: "supersenha"
+      }
+
+      response = User.changeset(%User{}, params)
+
+      assert errors_on(response) == %{name: ["should be at most 40 character(s)"]}
+    end
+
     test "When the email is not provided, it returns an error message." do
       params = %{
         name: "Guigo",
