@@ -26,7 +26,7 @@ defmodule FilesChestCloudApi.Accounts.User do
     |> validate_required(@required_fields)
     |> validate_format(:email, ~r/@/)
     |> validate_length(:name, min: 2, max: 40)
-    |> validate_length(:email, min: 11)
+    |> validate_length(:email, min: 11, max: 40)
     |> validate_length(:password, min: 6)
     |> unique_constraint(:email, name: :users_email_index)
     |> put_password_hash()

@@ -76,6 +76,18 @@ defmodule FilesChestCloudApi.Accounts.UserTest do
       assert errors_on(response) == %{email: ["should be at least 11 character(s)"]}
     end
 
+    test "When the email contains more than 40 characters, it returns an error." do
+      params = %{
+        name: "Guigo",
+        email: "um-endereco-de-email-longoooo@outlook.com",
+        password: "supersenha"
+      }
+
+      response = User.changeset(%User{}, params)
+
+      assert errors_on(response) == %{email: ["should be at most 40 character(s)"]}
+    end
+
     test "When the email format is invalid, it returns an error message." do
       params = %{
         name: "Guigo",
