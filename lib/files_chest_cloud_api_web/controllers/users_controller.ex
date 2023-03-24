@@ -43,24 +43,21 @@ defmodule FilesChestCloudApiWeb.UsersController do
   end
 
   def get_by_id(conn, %{"id" => id}) do
-    case Get.get_user_by_id(id) do
-      {:ok, user} ->
+    with {:ok, user} <- Get.get_user_by_id(id) do
+      conn
+      |> put_status(:ok)
+      |> json(%{user: user})
+
+    else
+      {:error, "Invalid id format!"} ->
         conn
-        |> put_status(:ok)
-        |> json(%{user: user})
+        |> put_status(:bad_request)
+        |> json(%{message: "Invalid id format!"})
 
-      {:error, message} ->
-        case message do
-          "Invalid id format!" ->
-            conn
-            |> put_status(:bad_request)
-            |> json(%{message: message})
-
-          "User does not exists!" ->
-            conn
-            |> put_status(:not_found)
-            |> json(%{message: message})
-        end
+      {:error, "User does not exists!"} ->
+        conn
+        |> put_status(:not_found)
+        |> json(%{message: "User does not exists!"})
     end
   end
 
