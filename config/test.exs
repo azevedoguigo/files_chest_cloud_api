@@ -9,7 +9,7 @@ config :files_chest_cloud_api, FilesChestCloudApi.Repo,
   username: "postgres",
   password: "postgrespw",
   hostname: "localhost",
-  port: 55000,
+  port: 32768,
   database: "files_chest_cloud_api_test#{System.get_env("MIX_TEST_PARTITION")}",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
