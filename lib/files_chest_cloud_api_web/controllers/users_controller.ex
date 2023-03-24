@@ -62,56 +62,50 @@ defmodule FilesChestCloudApiWeb.UsersController do
   end
 
   def update(conn, params_to_update) do
-    case Update.update_user(params_to_update) do
-      {:ok, updated_user} ->
+    with {:ok, updated_user} <- Update.update_user(params_to_update) do
+      conn
+      |> put_status(:ok)
+      |> json(%{message: "User updated!", user: updated_user})
+
+    else
+      {:error, "Invalid id format!"} ->
         conn
-        |> put_status(:ok)
-        |> json(%{message: "User updated!", user: updated_user})
+        |> put_status(:bad_request)
+        |> json(%{message: "Invalid id format!"})
 
-      {:error, reason} ->
-        case reason do
-          "Invalid id format!" ->
-            conn
-            |> put_status(:bad_request)
-            |> json(%{message: reason})
+      {:error, "User does not exists!"} ->
+        conn
+        |> put_status(:not_found)
+        |> json(%{message: "User does not exists!"})
 
-          "User does not exists!" ->
-            conn
-            |> put_status(:not_found)
-            |> json(%{message: reason})
+      {:error, "Incorrect password!"} ->
+        conn
+        |> put_status(:bad_request)
+        |> json(%{message: "Incorrect password!"})
 
-          "Incorrect password!" ->
-            conn
-            |> put_status(:bad_request)
-            |> json(%{message: reason})
-
-          invalid_changeset ->
-            conn
-            |> put_status(:bad_request)
-            |> json(%{error: ErrorHandler.translate_errors(invalid_changeset)})
-        end
+      {:error, invalid_changeset} ->
+        conn
+        |> put_status(:bad_request)
+        |> json(%{error: ErrorHandler.translate_errors(invalid_changeset)})
     end
   end
 
   def delete(conn, %{"id" => id}) do
-    case Delete.delete_user(id) do
-      {:ok, _user} ->
+    with {:ok, _user} <- Delete.delete_user(id) do
+      conn
+      |> put_status(:ok)
+      |> json(%{message: "User deleted!"})
+
+    else
+      {:error, "Invalid id format!"} ->
         conn
-        |> put_status(:ok)
-        |> json(%{message: "User deleted!"})
+        |> put_status(:bad_request)
+        |> json(%{message: "Invalid id format!"})
 
-      {:error, message} ->
-        case message do
-          "Invalid id format!" ->
-            conn
-            |> put_status(:bad_request)
-            |> json(%{message: message})
-
-          "User does not exists!" ->
-            conn
-            |> put_status(:not_found)
-            |> json(%{message: message})
-        end
+      {:error, "User does not exists!"} ->
+        conn
+        |> put_status(:not_found)
+        |> json(%{message: "User does not exists!"})
     end
   end
 end
