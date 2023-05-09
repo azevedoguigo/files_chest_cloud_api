@@ -30,6 +30,7 @@ defmodule FilesChestCloudApi.Accounts.Update do
         {:error, "Incorrect password!"}
 
       true ->
+        # currentPassword is removed as it is only used to validate the password.
         params_to_update = Map.delete(params_to_update, "currentPassword")
 
         user
