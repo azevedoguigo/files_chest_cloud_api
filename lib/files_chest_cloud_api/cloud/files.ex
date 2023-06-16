@@ -19,10 +19,9 @@ defmodule FilesChestCloudApi.Cloud.Files do
 
   def list_files(user_id) do
     files_list =
-      S3.list_objects_v2(@bucket_name)
+      S3.list_objects_v2(@bucket_name, prefix: user_id)
       |> ExAws.stream!()
       |> Enum.to_list()
-      |> Enum.filter(fn file -> String.contains?(file.key, user_id) end)
       |> Enum.map(fn file ->
         Map.put(file, :key, String.slice(file.key, 37, String.length(file.key)))
       end)
