@@ -5,7 +5,7 @@ defmodule FilesChestCloudApi.MixProject do
     [
       app: :files_chest_cloud_api,
       version: "0.1.0",
-      elixir: "~> 1.14.3",
+      elixir: "~> 1.15.6",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -44,7 +44,7 @@ defmodule FilesChestCloudApi.MixProject do
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:argon2_elixir, "~> 3.0"},
+      {:argon2_elixir, "~> 3.2"},
       {:guardian, "~> 2.0"},
       {:ex_aws, "~> 2.1"},
       {:ex_aws_s3, "~> 2.0"},

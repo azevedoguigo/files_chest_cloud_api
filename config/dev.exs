@@ -3,9 +3,8 @@ import Config
 # Configure your database
 config :files_chest_cloud_api, FilesChestCloudApi.Repo,
   username: "postgres",
-  password: "postgrespw",
+  password: "postgres",
   hostname: "localhost",
-  port: 32768,
   database: "files_chest_cloud_api_dev",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
