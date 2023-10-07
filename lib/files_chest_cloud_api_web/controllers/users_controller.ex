@@ -29,7 +29,7 @@ defmodule FilesChestCloudApiWeb.UsersController do
 
     conn
     |> put_status(:ok)
-    |> json(%{user: user})
+    |> render("get_by_id.json", user: user)
   end
 
   def get_by_id(conn, %{"id" => id}) do
