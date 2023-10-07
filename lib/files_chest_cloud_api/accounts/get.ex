@@ -8,13 +8,23 @@ defmodule FilesChestCloudApi.Accounts.Get do
   alias Ecto.UUID
 
   def get_user_by_id(id) do
+    case validate_id(id) do
+      {:ok, valid_uuid} -> handle_get_user(valid_uuid)
+      {:error, message} -> {:error, %{message: message, status_code: :bad_request}}
+    end
+  end
+
+  defp validate_id(id) do
     case UUID.cast(id) do
+      {:ok, uuid} -> {:ok, uuid}
       :error -> {:error, "Invalid id format!"}
-      {:ok, _uuid} ->
-        case {:ok, Repo.get(User, id)} do
-          {:ok, nil} -> {:error, "User does not exists!"}
-          {:ok, user} -> {:ok, user}
-        end
+    end
+  end
+
+  defp handle_get_user(valid_uuid) do
+    case Repo.get(User, valid_uuid) do
+      nil -> {:error, %{message: "User does not exists!", status_code: :not_found}}
+      user -> {:ok, user}
     end
   end
 end

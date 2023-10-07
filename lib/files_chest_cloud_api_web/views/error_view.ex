@@ -15,6 +15,10 @@ defmodule FilesChestCloudApiWeb.ErrorView do
     %{errors: %{detail: Phoenix.Controller.status_message_from_template(template)}}
   end
 
+  def render("400.json", %{message: message}) do
+    %{message: message}
+  end
+
   def render("400.json", %{changeset: changeset}) do
     %{error: translate_errors(changeset)}
   end
