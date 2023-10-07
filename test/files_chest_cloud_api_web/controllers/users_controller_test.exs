@@ -75,7 +75,7 @@ defmodule FilesChestCloudApiWeb.UsersControllerTest do
       response =
         conn
         |> post(Routes.users_path(conn, :sign_in, credentials))
-        |> json_response(:unauthorized)
+        |> json_response(:not_found)
 
       assert %{"message" => "Email not registred!"} == response
     end

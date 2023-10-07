@@ -24,11 +24,24 @@ defmodule FilesChestCloudApi.Accounts.DeleteTest do
     end
 
     test "When an id is provided that is not assigned to any user, it returns an error message." do
-      assert {:error, "User does not exists!"} == Delete.delete_user("36cfbe97-d9dd-46b2-8287-6e8e8cc626ef")
+      response = Delete.delete_user("36cfbe97-d9dd-46b2-8287-6e8e8cc626ef")
+
+      expected_response = {
+        :error,
+        %{message: "User does not exists!", status_code: :not_found}
+      }
+      assert expected_response == response
     end
 
     test "When an invalid id is provided, it returns an error message." do
-      assert {:error, "Invalid id format!"} == Delete.delete_user("invalid_id")
+      response = Delete.delete_user("invalid_id")
+
+      expected_response = {
+        :error,
+        %{message: "Invalid id format!", status_code: :bad_request}
+      }
+
+      assert expected_response == response
     end
   end
 end

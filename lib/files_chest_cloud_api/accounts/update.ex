@@ -8,17 +8,23 @@ defmodule FilesChestCloudApi.Accounts.Update do
   alias Ecto.UUID
 
   def update_user(%{"id" => id} = params_to_update) do
+    case validate_id(id) do
+      {:ok, valid_uuid} -> handle_get_user(valid_uuid, params_to_update)
+      {:error, error_data} -> {:error, error_data}
+    end
+  end
+
+  defp validate_id(id) do
     case UUID.cast(id) do
-      :error -> {:error, "Invalid id format!"}
+      {:ok, uuid} -> {:ok, uuid}
+      :error -> {:error, %{message: "Invalid id format!", status_code: :bad_request}}
+    end
+  end
 
-      {:ok, _uuid} ->
-        case Repo.get(User, id) do
-          nil ->
-            {:error, "User does not exists!"}
-
-          user ->
-            validate_password_and_update_user(user, params_to_update)
-        end
+  defp handle_get_user(valid_uuid, params_to_update) do
+    case Repo.get(User, valid_uuid) do
+      nil -> {:error, %{message: "User does not exists!", status_code: :not_found}}
+      user -> validate_password_and_update_user(user, params_to_update)
     end
   end
 
@@ -27,7 +33,7 @@ defmodule FilesChestCloudApi.Accounts.Update do
 
     case Argon2.verify_pass(current_password, hash) do
       false ->
-        {:error, "Incorrect password!"}
+        {:error, %{message: "Incorrect password!", status_code: :bad_request}}
 
       true ->
         # currentPassword is removed as it is only used to validate the password.

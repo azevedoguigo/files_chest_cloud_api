@@ -4,33 +4,22 @@ defmodule FilesChestCloudApiWeb.UsersController do
   alias FilesChestCloudApiWeb.Auth.Guardian
   alias FilesChestCloudApi.Accounts.{Create, Get, Update, Delete}
   alias FilesChestCloudApiWeb.Auth.UserAuth
-  alias FilesChestCloudApiWeb.ErrorHandler
+
+  action_fallback FilesChestCloudApiWeb.FallbackController
 
   def create(conn, params) do
-    case Create.register_user(params) do
-      {:ok, user} ->
-        conn
-        |> put_status(:created)
-        |> json(%{message: "User registred!", user: user})
-
-      {:error, changeset} ->
-        conn
-        |> put_status(:bad_request)
-        |> json(%{error: ErrorHandler.translate_errors(changeset)})
+    with {:ok, user} <- Create.register_user(params) do
+      conn
+      |> put_status(:created)
+      |> render("create.json", user: user)
     end
   end
 
   def sign_in(conn, credentials) do
-    case UserAuth.authenticate(credentials) do
-      {:ok, token} ->
-        conn
-        |> put_status(:ok)
-        |> json(token)
-
-      {:error, error_message} ->
-        conn
-        |> put_status(:unauthorized)
-        |> json(%{message: error_message})
+    with {:ok, token} <- UserAuth.authenticate(credentials) do
+      conn
+      |> put_status(:ok)
+      |> render("sign_in.json", token: token)
     end
   end
 
@@ -39,25 +28,14 @@ defmodule FilesChestCloudApiWeb.UsersController do
 
     conn
     |> put_status(:ok)
-    |> json(%{user: user})
+    |> render("show.json", user: user)
   end
 
   def get_by_id(conn, %{"id" => id}) do
     with {:ok, user} <- Get.get_user_by_id(id) do
       conn
       |> put_status(:ok)
-      |> json(%{user: user})
-
-    else
-      {:error, "Invalid id format!"} ->
-        conn
-        |> put_status(:bad_request)
-        |> json(%{message: "Invalid id format!"})
-
-      {:error, "User does not exists!"} ->
-        conn
-        |> put_status(:not_found)
-        |> json(%{message: "User does not exists!"})
+      |> render("show.json", user: user)
     end
   end
 
@@ -65,28 +43,7 @@ defmodule FilesChestCloudApiWeb.UsersController do
     with {:ok, updated_user} <- Update.update_user(params_to_update) do
       conn
       |> put_status(:ok)
-      |> json(%{message: "User updated!", user: updated_user})
-
-    else
-      {:error, "Invalid id format!"} ->
-        conn
-        |> put_status(:bad_request)
-        |> json(%{message: "Invalid id format!"})
-
-      {:error, "User does not exists!"} ->
-        conn
-        |> put_status(:not_found)
-        |> json(%{message: "User does not exists!"})
-
-      {:error, "Incorrect password!"} ->
-        conn
-        |> put_status(:bad_request)
-        |> json(%{message: "Incorrect password!"})
-
-      {:error, invalid_changeset} ->
-        conn
-        |> put_status(:bad_request)
-        |> json(%{error: ErrorHandler.translate_errors(invalid_changeset)})
+      |> render("update.json", user: updated_user)
     end
   end
 
@@ -95,17 +52,6 @@ defmodule FilesChestCloudApiWeb.UsersController do
       conn
       |> put_status(:ok)
       |> json(%{message: "User deleted!"})
-
-    else
-      {:error, "Invalid id format!"} ->
-        conn
-        |> put_status(:bad_request)
-        |> json(%{message: "Invalid id format!"})
-
-      {:error, "User does not exists!"} ->
-        conn
-        |> put_status(:not_found)
-        |> json(%{message: "User does not exists!"})
     end
   end
 end

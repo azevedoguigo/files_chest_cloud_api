@@ -18,11 +18,25 @@ defmodule FilesChestCloudApi.Accounts.GetTest do
     end
 
     test "When the entered id does not match any user, it returns an error message." do
-      assert {:error, "User does not exists!"} == Get.get_user_by_id("64b66e39-ae33-4d4b-a1ff-08c4c2b5b999")
+      response = Get.get_user_by_id("64b66e39-ae33-4d4b-a1ff-08c4c2b5b999")
+
+      expected_response = {
+        :error,
+        %{message: "User does not exists!", status_code: :not_found}
+      }
+
+      assert expected_response == response
     end
 
     test "When the id format is invalid, it returns an error message." do
-      assert {:error, "Invalid id format!"} == Get.get_user_by_id("invalid_id_format")
+      response = Get.get_user_by_id("invalid_id_format")
+
+      expected_response = {
+        :error,
+        %{message: "Invalid id format!", status_code: :bad_request}
+      }
+
+      assert expected_response == response
     end
   end
 end
