@@ -6,6 +6,8 @@ defmodule FilesChestCloudApiWeb.UsersController do
   alias FilesChestCloudApiWeb.Auth.UserAuth
   alias FilesChestCloudApiWeb.ErrorHandler
 
+  action_fallback FilesChestCloudApiWeb.FallbackController
+
   def create(conn, params) do
     case Create.register_user(params) do
       {:ok, user} ->
@@ -21,16 +23,10 @@ defmodule FilesChestCloudApiWeb.UsersController do
   end
 
   def sign_in(conn, credentials) do
-    case UserAuth.authenticate(credentials) do
-      {:ok, token} ->
-        conn
-        |> put_status(:ok)
-        |> json(token)
-
-      {:error, error_message} ->
-        conn
-        |> put_status(:unauthorized)
-        |> json(%{message: error_message})
+    with {:ok, token} <- UserAuth.authenticate(credentials) do
+      conn
+      |> put_status(:ok)
+      |> render("sign_in.json", token: token)
     end
   end
 
