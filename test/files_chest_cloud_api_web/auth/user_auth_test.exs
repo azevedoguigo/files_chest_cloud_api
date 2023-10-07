@@ -20,7 +20,7 @@ defmodule FilesChestCloudApiWeb.Auth.UserAuthTest do
     test "When the provided email is not registred, returns an error message." do
       response = UserAuth.authenticate(%{"email" => "wrong_email@example.com", "password" => "test"})
 
-      expected_response = %{message: "Email not registred!", status_code: :not_found}
+      expected_response = {:error, %{message: "Email not registred!", status_code: :not_found}}
 
       assert expected_response == response
     end
@@ -30,7 +30,7 @@ defmodule FilesChestCloudApiWeb.Auth.UserAuthTest do
 
       response = UserAuth.authenticate(%{"email" => email, "password" => "wrong_password"})
 
-      expected_response = %{message: "Invalid password!", status_code: :unauthorized}
+      expected_response = {:error, %{message: "Invalid password!", status_code: :unauthorized}}
 
       assert expected_response == response
     end
@@ -46,7 +46,7 @@ defmodule FilesChestCloudApiWeb.Auth.UserAuthTest do
     test "If the entered password is incorrect, it returns a error." do
       {:ok, user} = Create.register_user(@user_default_params)
 
-      expected_response = %{message: "Invalid password!", status_code: :unauthorized}
+      expected_response = {:error, %{message: "Invalid password!", status_code: :unauthorized}}
 
       assert expected_response == UserAuth.validate_password(user, "wrong_password")
     end
