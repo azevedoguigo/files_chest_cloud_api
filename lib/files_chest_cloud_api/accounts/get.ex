@@ -10,14 +10,14 @@ defmodule FilesChestCloudApi.Accounts.Get do
   def get_user_by_id(id) do
     case validate_id(id) do
       {:ok, valid_uuid} -> handle_get_user(valid_uuid)
-      {:error, message} -> {:error, %{message: message, status_code: :bad_request}}
+      {:error, error_data} -> {:error, error_data}
     end
   end
 
   defp validate_id(id) do
     case UUID.cast(id) do
       {:ok, uuid} -> {:ok, uuid}
-      :error -> {:error, "Invalid id format!"}
+      :error -> {:error, %{message: "Invalid id format!", status_code: :bad_request}}
     end
   end
 
