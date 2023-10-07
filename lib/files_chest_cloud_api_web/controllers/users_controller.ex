@@ -4,7 +4,6 @@ defmodule FilesChestCloudApiWeb.UsersController do
   alias FilesChestCloudApiWeb.Auth.Guardian
   alias FilesChestCloudApi.Accounts.{Create, Get, Update, Delete}
   alias FilesChestCloudApiWeb.Auth.UserAuth
-  alias FilesChestCloudApiWeb.ErrorHandler
 
   action_fallback FilesChestCloudApiWeb.FallbackController
 
@@ -29,14 +28,14 @@ defmodule FilesChestCloudApiWeb.UsersController do
 
     conn
     |> put_status(:ok)
-    |> render("get_by_id.json", user: user)
+    |> render("show.json", user: user)
   end
 
   def get_by_id(conn, %{"id" => id}) do
     with {:ok, user} <- Get.get_user_by_id(id) do
       conn
       |> put_status(:ok)
-      |> render("get_by_id.json", user: user)
+      |> render("show.json", user: user)
     end
   end
 
@@ -44,28 +43,7 @@ defmodule FilesChestCloudApiWeb.UsersController do
     with {:ok, updated_user} <- Update.update_user(params_to_update) do
       conn
       |> put_status(:ok)
-      |> json(%{message: "User updated!", user: updated_user})
-
-    else
-      {:error, "Invalid id format!"} ->
-        conn
-        |> put_status(:bad_request)
-        |> json(%{message: "Invalid id format!"})
-
-      {:error, "User does not exists!"} ->
-        conn
-        |> put_status(:not_found)
-        |> json(%{message: "User does not exists!"})
-
-      {:error, "Incorrect password!"} ->
-        conn
-        |> put_status(:bad_request)
-        |> json(%{message: "Incorrect password!"})
-
-      {:error, invalid_changeset} ->
-        conn
-        |> put_status(:bad_request)
-        |> json(%{error: ErrorHandler.translate_errors(invalid_changeset)})
+      |> render("update.json", user: updated_user)
     end
   end
 

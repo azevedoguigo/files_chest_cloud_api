@@ -65,7 +65,12 @@ defmodule FilesChestCloudApi.Accounts.UpdateTest do
 
       response = Update.update_user(params_to_update)
 
-      assert {:error, "User does not exists!"} == response
+      exected_response = {
+        :error,
+        %{message: "User does not exists!", status_code: :not_found}
+      }
+
+      assert exected_response == response
     end
 
     test "When the provided id is invalid, it returns an error message." do
@@ -78,7 +83,12 @@ defmodule FilesChestCloudApi.Accounts.UpdateTest do
 
       response = Update.update_user(params_to_update)
 
-      assert {:error, "Invalid id format!"} == response
+      expected_response = {
+        :error,
+        %{message: "Invalid id format!", status_code: :bad_request}
+      }
+
+      assert expected_response == response
     end
   end
 end

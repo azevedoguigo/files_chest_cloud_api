@@ -5,7 +5,11 @@ defmodule FilesChestCloudApiWeb.UsersView do
     %{message: "User registred!", user: user}
   end
 
-  def render("get_by_id.json", %{user: user}), do: %{user: user}
+  def render("show.json", %{user: user}), do: %{user: user}
+
+  def render("update.json", %{user: user}) do
+    %{message: "User updated!", user: user}
+  end
 
   def render("delete.json", message), do: message
 
