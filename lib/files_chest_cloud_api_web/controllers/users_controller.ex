@@ -74,17 +74,6 @@ defmodule FilesChestCloudApiWeb.UsersController do
       conn
       |> put_status(:ok)
       |> json(%{message: "User deleted!"})
-
-    else
-      {:error, "Invalid id format!"} ->
-        conn
-        |> put_status(:bad_request)
-        |> json(%{message: "Invalid id format!"})
-
-      {:error, "User does not exists!"} ->
-        conn
-        |> put_status(:not_found)
-        |> json(%{message: "User does not exists!"})
     end
   end
 end
