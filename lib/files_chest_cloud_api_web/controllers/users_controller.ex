@@ -9,16 +9,10 @@ defmodule FilesChestCloudApiWeb.UsersController do
   action_fallback FilesChestCloudApiWeb.FallbackController
 
   def create(conn, params) do
-    case Create.register_user(params) do
-      {:ok, user} ->
-        conn
-        |> put_status(:created)
-        |> json(%{message: "User registred!", user: user})
-
-      {:error, changeset} ->
-        conn
-        |> put_status(:bad_request)
-        |> json(%{error: ErrorHandler.translate_errors(changeset)})
+    with {:ok, user} <- Create.register_user(params) do
+      conn
+      |> put_status(:created)
+      |> render("create.json", user: user)
     end
   end
 
