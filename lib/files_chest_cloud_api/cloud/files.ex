@@ -5,7 +5,7 @@ defmodule FilesChestCloudApi.Cloud.Files do
 
   alias ExAws.S3
 
-  @bucket_name "#{System.get_env("BUCKET_NAME")}"
+  @bucket_name to_string(System.get_env("BUCKET_NAME"))
 
   def get_file_info(user_id, filename) do
     {:ok, files_list} = list_files(user_id)
