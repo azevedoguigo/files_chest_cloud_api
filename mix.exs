@@ -4,7 +4,7 @@ defmodule FilesChestCloudApi.MixProject do
   def project do
     [
       app: :files_chest_cloud_api,
-      version: "0.1.0",
+      version: "1.0.4",
       elixir: "~> 1.15.6",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: Mix.compilers(),
