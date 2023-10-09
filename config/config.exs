@@ -45,7 +45,7 @@ config :cors_plug,
 # Guardian configuration.
 config :files_chest_cloud_api, FilesChestCloudApiWeb.Auth.Guardian,
   issuer: "files_chest_cloud_api",
-  secret_key: "aUXZAzbtyyYC+M7qvK/UYjM9Sp/HuP9gTCdXjQx1lHEKA6kWHTpRW6kRoLgh++VC"
+  secret_key: System.get_env("AUTH_SECRET_KEY")
 
 config :files_chest_cloud_api, FilesChestCloudApiWeb.Auth.Pipeline,
   module: FilesChestCloudApiWeb.Auth.Guardian,
